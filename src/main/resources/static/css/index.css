@@ -1,0 +1,16 @@
+@charset "UTF-8";
+html, body {
+    height: 100%;
+}
+
+.container-fluid {
+    height: 100%;
+}
+
+.row {
+    height: 100%;
+}
+
+.bg-light.border-end {
+    height: 100%;
+}

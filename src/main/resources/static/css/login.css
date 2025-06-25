@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+.card{
+    width: 18rem;
+}
+
+.login-card {
+    margin-top: 100px ;
+}
+body {
+    background-color: #eeeeee;
+}

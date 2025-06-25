@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>発注申請</title>
+<!--    <link rel="stylesheet" th:href="@{/css/request_form.css}">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container-fulid">
+    <div class="row">
+        <div class="col-md-2 bg-light border-end">
+            <ul class="nav flex-column py-2">
+                <li class="nav-item"><a th:href="@{/items}" class="nav-link">商品一覧</a></li>
+                <li class="nav-item"><a th:href="@{/inventories}" class="nav-link">在庫一覧</a></li>
+                <li class="nav-item"><a th:href="@{/expiration}" class="nav-link">期限確認</a></li>
+                <li class="nav-item"><a th:href="@{/transaction}" class="nav-link">入出庫管理</a></li>
+                <li class="nav-item"><a th:href="@{/order}" class="nav-link">発注申請</a></li>
+                <li class="nav-item"><a th:href="@{/transaction/history}" class="nav-link">入出庫履歴</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">申請一覧</a></li>
+            </ul>
+        </div>
+        <div class="col-md-10 p-4">
+            <div class="row">
+                <!-- 左：OrderRequest一覧 -->
+                <div class="col-md-4 border-end">
+                    <h3>申請一覧</h3>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr><th>申請No</th><th>申請日</th><th>申請者</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="req : ${requests}">
+                                <td>
+                                    <a th:href="@{/order/list(requestId=${req.id})}" th:text="${req.id}"></a>
+                                </td>
+                                <td th:text="${#temporals.format(req.requestDate, 'yy/MM/dd')}"></td>
+                                <td th:text="${req.user.name}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 右：OrderRequestDetail（選択中） -->
+                <div class="col-md-6">
+                    <h3> </h3>
+                    <h3 th:if="${selectedRequest != null}">申請詳細（No <span th:text="${selectedRequest.id}"></span>）</h3>
+
+                    <!-- 発注申請詳細テーブル -->
+                    <table class="table table-sm ">
+                        <thead>
+                            <tr>
+                                <th>商品ID</th>
+                                <th>商品名</th>
+                                <th>カテゴリー</th>
+                                <th>発注単位</th>
+                                <th>標準在庫</th>
+                                <th>現在庫</th>
+                                <th>発注数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="detail : ${orderDetails}">
+                                <td th:text="${detail.itemId}"></td>
+                                <td th:text="${detail.itemName}"></td>
+                                <td th:text="${detail.categoryName}"></td>
+                                <td th:text="${detail.orderUnit}"></td>
+                                <td th:text="${detail.stockStd}"></td>
+                                <td th:text="${detail.currentQuantity}"></td>
+                                <td th:text="${detail.orderQuantity}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>

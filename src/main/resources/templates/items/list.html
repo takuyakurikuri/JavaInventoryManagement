@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>商品一覧</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row d-flex">
+
+        <div class="col-md-2 bg-light border-end">
+            <ul class="nav flex-column py-2">
+                <li class="nav-item"><a th:href="@{/items}" class="nav-link">商品一覧</a></li>
+                <li class="nav-item"><a th:href="@{/inventories}" class="nav-link">在庫一覧</a></li>
+                <li class="nav-item"><a th:href="@{/expiration}" class="nav-link">期限確認</a></li>
+                <li class="nav-item"><a th:href="@{/transaction}" class="nav-link">入出庫管理</a></li>
+                <li class="nav-item"><a th:href="@{/order}" class="nav-link">発注申請</a></li>
+                <li class="nav-item"><a th:href="@{/transaction/history}" class="nav-link">入出庫履歴</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">申請一覧</a></li>
+            </ul>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <div class="col-md-10 p-4">
+
+<!--             タイトルバー -->
+<!--            <div th:replace="fragments :: pageTitle('商品一覧')" th:with="name=${user.name}, today=${T(java.time.LocalDateTime).now()}"></div>-->
+            <h1>商品一覧</h1>
+            <!-- 商品登録ボタン -->
+            <div class="mb-3 text-end">
+                <a th:href="@{/items/new}" class="btn btn-warning">商品登録</a>
+            </div>
+
+            <!-- 検索エリア -->
+            <form class="row g-2 align-items-end mb-3">
+                <div class="col-md-3">
+                    <label class="form-label">検索：</label>
+                    <input type="text" name="keyword" class="form-control" placeholder="商品コード　商品名など">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">ジャンル：</label>
+                    <select name="category" class="form-select">
+                        <option value="">全て</option>
+                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">仕入先：</label>
+                    <select name="supplier" class="form-select">
+                        <option value="">全て</option>
+                        <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}"></option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-secondary w-100">絞り込み</button>
+                </div>
+            </form>
+
+            <!-- 件数表示 -->
+            <p>絞り込み数：<span >0</span>件</p>
+
+            <!-- テーブル -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>商品コード</th>
+                            <th>商品名</th>
+                            <th>ジャンル</th>
+                            <th>標準数</th>
+                            <th>発単</th>
+                            <th>仕入れ先</th>
+                            <th>編</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${items}">
+                            <td th:text="${item.janCode}"></td>
+                            <td th:text="${item.name}"></td>
+                            <td th:text="${item.category.name}"></td>
+                            <td th:text="${item.stockStd}"></td>
+                            <td th:text="${item.orderUnit}"></td>
+                            <td th:text="${item.supplier.name}"></td>
+                            <td><a th:href="@{'/items/edit/' + ${item.id}}">※</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ページネーション -->
+<!--            <nav aria-label="ページ">-->
+<!--                <ul class="pagination justify-content-center">-->
+<!--                    <li class="page-item"><a class="page-link" href="#">＜前へ</a></li>-->
+<!--                    <li class="page-item"><a class="page-link" href="#">＜最初へ</a></li>-->
+<!--                    <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}" th:classappend="${i == currentPage} ? 'active'">-->
+<!--                        <a class="page-link" th:href="@{|/items?page=${i}|}" th:text="${i}"></a>-->
+<!--                    </li>-->
+<!--                    <li class="page-item"><a class="page-link" href="#">次へ＞</a></li>-->
+<!--                    <li class="page-item"><a class="page-link" href="#">最後へ＞</a></li>-->
+<!--                </ul>-->
+<!--            </nav>-->
+
+            <!-- 商品削除ボタン -->
+            <div class="text-end mt-3">
+                <form th:action="@{/items/delete}" method="post">
+                    <button type="submit" class="btn btn-outline-danger">商品削除</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

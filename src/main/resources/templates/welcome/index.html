@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>在庫管理システム</title>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 bg-light border-end">
+                <ul class="nav flex-column py-2">
+                    <li class="nav-item"><a th:href="@{/items}" class="nav-link">商品一覧</a></li>
+                    <li class="nav-item"><a th:href="@{/inventories}" class="nav-link">在庫一覧</a></li>
+                    <li class="nav-item"><a th:href="@{/expiration}" class="nav-link">期限確認</a></li>
+                    <li class="nav-item"><a th:href="@{/transaction}" class="nav-link">入出庫管理</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">発注情報</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">入出庫履歴</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">申請一覧</a></li>
+                </ul>
+            </div>
+            <div class="col-md-10 p-4">
+                <div class="d-flex justify-content-between">
+                    <h1>在庫管理システム</h1>
+                    <div class="user-info">
+                        <p th:text="${user.name} + ':' + ${user.store.name}" class="mb-0"></p>
+                        <p id="currentTime">読み込み中...</p>
+                    </div>
+                </div>
+                <div class="alert alert-warning text-danger" th:if="${understockCount > 0}">
+                    在庫が少ない商品があります。発注してください。（ <strong class="fw-bold text-decoration-underline" th:text="${understockCount}"></strong>件）
+                </div>
+                <div class="alert alert-warning text-danger" th:if="${nearExpirationCount > 0}">
+                    賞味期限切れが近い商品があります。売り場を確認してください。（ <strong class="fw-bold text-decoration-underline" th:text="${nearExpirationCount}"></strong>件）
+                </div>
+                <form th:action="@{/logout}" method="post" style="display: inline;" class="mt-4">
+                    <button type="submit" class="btn btn-primary">ログアウト</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleString(); // 日時の文字列を整形（日本語ロケール）
+            document.getElementById('currentTime').textContent = timeStr;
+        }
+
+        setInterval(updateTime, 1000); // 毎秒実行
+        window.onload = updateTime;   // ページ読み込み時に即時表示
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>

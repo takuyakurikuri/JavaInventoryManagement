@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>賞味期限確認一覧</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container-fulid">
+    <div class="row">
+        <div class="col-md-2 bg-light border-end">
+            <ul class="nav flex-column py-2">
+                <li class="nav-item"><a th:href="@{/items}" class="nav-link">商品一覧</a></li>
+                <li class="nav-item"><a th:href="@{/inventories}" class="nav-link">在庫一覧</a></li>
+                <li class="nav-item"><a th:href="@{/expiration}" class="nav-link">期限確認</a></li>
+                <li class="nav-item"><a th:href="@{/transaction}" class="nav-link">入出庫管理</a></li>
+                <li class="nav-item"><a th:href="@{/order}" class="nav-link">発注申請</a></li>
+                <li class="nav-item"><a th:href="@{/transaction/history}" class="nav-link">入出庫履歴</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">申請一覧</a></li>
+            </ul>
+        </div>
+        <div class="col-md-10 p-4">
+            <h1 class="">賞味期限確認一覧</h1>
+            <div class="alert alert-warning text-danger" th:if="${nearExpirationCount > 0}">
+                賞味期限切れが近い商品があります。売り場を確認してください。（ <strong class="fw-bold text-decoration-underline" th:text="${nearExpirationCount}"></strong>件）
+            </div>
+            <table class="table table-bordered table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th>JANコード</th>
+                        <th>商品名</th>
+                        <th>カテゴリ</th>
+                        <th>賞味期限</th>
+                        <th>確認</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${expirations}" th:classappend="${item.nearExpiration} ? 'table-warning'">
+                        <td th:text="${item.janCode}"></td>
+                        <td th:text="${item.itemName}"></td>
+                        <td th:text="${item.categoryName}"></td>
+                        <td th:text="${item.expirationDate}"></td>
+                        <td>
+                            <form th:action="@{'/expiration/confirm/' + ${item.transactionId}}" method="post">
+                                <button class="btn btn-sm btn-success">確認</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>

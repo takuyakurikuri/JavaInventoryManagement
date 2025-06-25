@@ -1,0 +1,26 @@
+@charset "UTF-8";
+.form-inline-example {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .form-inline-example label {
+            width: 170px; /* ここで統一 */
+            margin-bottom: 0;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .form-inline-example input,
+        .form-inline-example select {
+            flex: 1; /* 残り幅いっぱい使う */
+            margin-right: 10px;
+            max-width: 200px;
+        }
+
+        .form-inline-example .example-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }

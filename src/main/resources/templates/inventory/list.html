@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>在庫一覧</title>
+    <link rel="stylesheet" th:href="@{/css/inventoryList.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 bg-light border-end">
+                <ul class="nav flex-column py-2">
+                    <li class="nav-item"><a th:href="@{/items}" class="nav-link">商品一覧</a></li>
+                    <li class="nav-item"><a th:href="@{/inventories}" class="nav-link">在庫一覧</a></li>
+                    <li class="nav-item"><a th:href="@{/expiration}" class="nav-link">期限確認</a></li>
+                    <li class="nav-item"><a th:href="@{/transaction}" class="nav-link">入出庫管理</a></li>
+                    <li class="nav-item"><a th:href="@{/order}" class="nav-link">発注申請</a></li>
+                    <li class="nav-item"><a th:href="@{/transaction/history}" class="nav-link">入出庫履歴</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">申請一覧</a></li>
+                </ul>
+            </div>
+            <div class="col-md-10 p-4">
+                <h1>在庫一覧</h1>
+                <div class="alert alert-warning text-danger" th:if="${understockCount > 0}">
+                    在庫が少ない商品があります。発注してください。（ <strong class="fw-bold text-decoration-underline" th:text="${understockCount}"></strong>件）
+                </div>
+                <table class="table table-bordered table-sm align-middle">
+                    <tr>
+                        <th>商品コード</th>
+                        <th>商品名</th>
+                        <th>ジャンル</th>
+                        <th>標準在庫数</th>
+                        <th>現在在庫数</th>
+                    </tr>
+                    <tr th:each="dto : ${inventoryItems}" th:classappend="${dto.item.stockStd} > ${dto.inventory.quantity} ? 'table-warning' : ''">
+                        <td th:text="${dto.item.janCode}">1234567890123</td>
+                        <td th:text="${dto.item.name}">商品名</td>
+                        <td th:text="${dto.item.category.name}">飲料</td>
+                        <td th:text="${dto.item.stockStd}">100</td>
+                        <td th:text="${dto.inventory.quantity}">80</td>
+                    </tr>
+                </table>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

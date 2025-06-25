@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>入出庫履歴</title>
+    <style>
+        .in-row { background-color: #fce5cd; }
+        .out-row { background-color: #d9ead3; }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    </head>
+</head>
+<body>
+    <div class="container-fluid">
+<div class="row">
+    <div class="col-md-2 bg-light border-end">
+        <ul class="nav flex-column py-2">
+            <li class="nav-item"><a th:href="@{/items}" class="nav-link">商品一覧</a></li>
+            <li class="nav-item"><a th:href="@{/inventories}" class="nav-link">在庫一覧</a></li>
+            <li class="nav-item"><a th:href="@{/expiration}" class="nav-link">期限確認</a></li>
+            <li class="nav-item"><a th:href="@{/transaction}" class="nav-link">入出庫管理</a></li>
+            <li class="nav-item"><a th:href="@{/order}" class="nav-link">発注申請</a></li>
+            <li class="nav-item"><a th:href="@{/transaction/history}" class="nav-link">入出庫履歴</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">申請一覧</a></li>
+        </ul>
+    </div>
+    <div class="col-md-10 p-4">
+        <table class="table table-bordered table-sm text-center">
+            <h1>入出庫履歴</h1>
+            <thead class="table-light">
+                <tr>
+                    <th>日付</th>
+                    <th>商品コード</th>
+                    <th>商品名</th>
+                    <th>ジャンル</th>
+                    <th>入出庫</th>
+                    <th>数量</th>
+                    <th>標準</th>
+                    <th>在庫</th>
+                    <th>登録者</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="dto : ${transactionDTOs}"
+                    th:classappend="${dto.transaction != null and dto.transaction.type != null and dto.transaction.type.name().equals('IN')} ? 'in-row' : 'out-row'">
+                    <td th:text="${#temporals.format(dto.transaction.createdAt, 'yyyy/MM/dd')}">2025/06/23</td>
+                    <td th:text="${dto.transaction.item.janCode}">456-****</td>
+                    <td th:text="${dto.transaction.item.name}">商品名</td>
+                    <td th:text="${dto.transaction.item.category.name}">ジャンル名</td>
+                    <td th:text="${dto.transaction.type.name() == 'IN' ? '入' : '出'}"></td>
+                    <td th:text="${dto.transaction.quantity}">12</td>
+                    <td th:text="${dto.transaction.item.stockStd}">30</td>
+                    <td th:text="${dto.currentStock}">28</td>
+                    <td th:text="${dto.transaction.user.name}">坂本竜馬</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>
