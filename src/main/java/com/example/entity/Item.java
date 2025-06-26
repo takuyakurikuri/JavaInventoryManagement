@@ -30,7 +30,7 @@ public class Item {
 
     @Column(nullable = false)
     @NotNull(message = "JANコードを入力してください")
-    private Long janCode;
+    private String janCode;
 
     @Column(nullable = false)
     @NotBlank(message = "名称を入力してください")

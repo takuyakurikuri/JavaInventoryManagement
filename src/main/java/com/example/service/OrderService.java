@@ -8,13 +8,13 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.example.dto.OrderItemDTO;
-import com.example.entity.Category;
 import com.example.entity.Inventory;
 import com.example.entity.Item;
 import com.example.entity.OrderRequest;
 import com.example.entity.OrderRequestDetail;
 import com.example.entity.Store;
 import com.example.repository.InventoryRepository;
+import com.example.repository.ItemRepository;
 import com.example.repository.OrderRequestRepository;
 
 @Service
@@ -24,29 +24,36 @@ public class OrderService {
 
     private final InventoryRepository inventoryRepository;
 
-    public OrderService(InventoryRepository inventoryRepository, OrderRequestRepository orderRequestRepository) {
+    private final ItemRepository itemRepository;
+
+    public OrderService(InventoryRepository inventoryRepository, OrderRequestRepository orderRequestRepository, ItemRepository itemRepository) {
         this.inventoryRepository = inventoryRepository;
         this.orderRequestRepository = orderRequestRepository;
+        this.itemRepository = itemRepository;
     }
 
     public List<OrderItemDTO> getOrderItemDTOsByStore(Store store) {
-        List<Inventory> inventories = inventoryRepository.findByStore(store);
+        List<Item> items = itemRepository.findAll(); // 全商品を取得
+        List<OrderItemDTO> result = new ArrayList<>();
 
-        return inventories.stream().map(inventory -> {
-            Item item = inventory.getItem();
-            Category category = item.getCategory();
+        for (Item item : items) {
+            Optional<Inventory> inventoryOpt = inventoryRepository.findByItemAndStore(item, store);
 
             OrderItemDTO dto = new OrderItemDTO();
             dto.setItemId(item.getId());
             dto.setItemName(item.getName());
-            dto.setCategoryName(category.getName());
+            dto.setCategoryName(item.getCategory().getName());
             dto.setOrderUnit(item.getOrderUnit());
             dto.setStockStd(item.getStockStd());
-            dto.setCurrentQuantity(inventory.getQuantity());
+            dto.setCurrentQuantity(inventoryOpt.map(Inventory::getQuantity).orElse(null)); // 在庫がなければnull
             dto.setOrderQuantity(0);
-            return dto;
-        }).toList();
+
+            result.add(dto);
+        }
+
+        return result;
     }
+
 
     public List<OrderItemDTO> getOrderDetailsByRequestId(Long requestId) {
 

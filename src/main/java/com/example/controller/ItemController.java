@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.entity.Item;
@@ -43,13 +44,25 @@ public class ItemController {
     }
 
     @GetMapping
-    public String showItemList(Model model) {
-        List<Item> items = itemService.findAll();
+    public String showItemList(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "category", required = false) Long categoryId,
+            @RequestParam(name = "supplier", required = false) Long supplierId,
+            Model model) {
+
+        List<Item> items = itemService.searchItems(keyword, categoryId, supplierId);
         model.addAttribute("items", items);
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("suppliers", supplierService.findAll());
+
+        // 検索条件の保持
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("selectedCategory", categoryId);
+        model.addAttribute("selectedSupplier", supplierId);
+
         return "items/list";
     }
+
 
     @GetMapping("/new")
     public String showCreateForm(Model model, @ModelAttribute Item item) {

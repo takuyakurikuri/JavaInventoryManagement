@@ -17,7 +17,7 @@
                 <li class="nav-item"><a th:href="@{/transaction}" class="nav-link">入出庫管理</a></li>
                 <li class="nav-item"><a th:href="@{/order}" class="nav-link">発注申請</a></li>
                 <li class="nav-item"><a th:href="@{/transaction/history}" class="nav-link">入出庫履歴</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">申請一覧</a></li>
+                <li class="nav-item"><a th:href="@{/order/list}" class="nav-link">申請一覧</a></li>
             </ul>
         </div>
 
@@ -36,20 +36,27 @@
             <form class="row g-2 align-items-end mb-3">
                 <div class="col-md-3">
                     <label class="form-label">検索：</label>
-                    <input type="text" name="keyword" class="form-control" placeholder="商品コード　商品名など">
+                    <input type="text" name="keyword" class="form-control"
+                           th:value="${keyword}" placeholder="商品コード　商品名など">
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">ジャンル：</label>
                     <select name="category" class="form-select">
                         <option value="">全て</option>
-                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:selected="${category.id == selectedCategory}"
+                                th:text="${category.name}"></option>
                     </select>
                 </div>
                 <div class="col-md-2">
                     <label class="form-label">仕入先：</label>
                     <select name="supplier" class="form-select">
                         <option value="">全て</option>
-                        <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}"></option>
+                        <option th:each="supplier : ${suppliers}"
+                                th:value="${supplier.id}"
+                                th:selected="${supplier.id == selectedSupplier}"
+                                th:text="${supplier.name}"></option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -58,7 +65,7 @@
             </form>
 
             <!-- 件数表示 -->
-            <p>絞り込み数：<span >0</span>件</p>
+            <p>絞り込み数：<span th:text="${items.size()}"></span>件</p>
 
             <!-- テーブル -->
             <div class="table-responsive">

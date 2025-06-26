@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.dto.TransactionDTO;
 import com.example.entity.Inventory;
+import com.example.entity.Store;
 import com.example.entity.Transaction;
 import com.example.enums.ShipmentType;
 import com.example.repository.InventoryRepository;
@@ -43,10 +44,12 @@ public class TransactionController {
     }
 
     @GetMapping
-    public String listInventories(Model model) {
-        model.addAttribute("inventoryItems", inventoryService.getAllItem());
+    public String listInventories(Model model, @AuthenticationPrincipal CustomUserDetails userDetails) {
+        Store userStore = userDetails.getStore();
+        model.addAttribute("inventoryItems", inventoryService.getAllItem(userStore));
         return "transactions/list";
     }
+
 
     @PostMapping("/in")
     public String registerInTransaction(

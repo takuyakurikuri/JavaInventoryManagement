@@ -1,0 +1,12 @@
+<!-- templates/fragments/sidebar.html -->
+<div th:fragment="sidebar">
+    <ul class="nav flex-column py-2" style="margin-top: 150px;">
+        <li class="nav-item"><a th:href="@{/items}" class="nav-link">商品一覧</a></li>
+        <li class="nav-item"><a th:href="@{/inventories}" class="nav-link">在庫一覧</a></li>
+        <li class="nav-item"><a th:href="@{/expiration}" class="nav-link">期限確認</a></li>
+        <li class="nav-item"><a th:href="@{/transaction}" class="nav-link">入出庫管理</a></li>
+        <li class="nav-item"><a th:href="@{/order}" class="nav-link">発注申請</a></li>
+        <li class="nav-item"><a th:href="@{/transaction/history}" class="nav-link">入出庫履歴</a></li>
+        <li class="nav-item"><a th:href="@{/order/list}" class="nav-link">申請一覧</a></li>
+    </ul>
+</div>

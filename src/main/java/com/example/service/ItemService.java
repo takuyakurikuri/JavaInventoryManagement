@@ -33,4 +33,12 @@ public class ItemService {
     public void deletebyId(Long id) {
         itemRepository.deleteById(id);
     }
+
+    public List<Item> searchItems(String keyword,Long categoryId,Long supplierId){
+        if ((keyword == null || keyword.isEmpty()) &&
+            categoryId == null && supplierId == null) {
+            return itemRepository.findAll();
+        }
+        return itemRepository.findByConditions(keyword, categoryId, supplierId);
+    }
 }

@@ -42,8 +42,8 @@ public class InventoryService {
         return Optional.empty();
     }
 
-    public List<InventoryWithItemDTO> getAllInventoryWithItem() {
-        List<Inventory> inventories = inventoryRepository.findAll();
+    public List<InventoryWithItemDTO> getAllInventoryWithItemByStore(Store store) {
+        List<Inventory> inventories = inventoryRepository.findByStore(store);//店舗関係なくすべての在庫を取得してしまう。
         List<InventoryWithItemDTO> result = new ArrayList<>();
 
         for (Inventory inv : inventories) {
@@ -59,12 +59,12 @@ public class InventoryService {
         return result;
     }
 
-    public List<InventoryWithItemDTO> getAllItem() {
+    public List<InventoryWithItemDTO> getAllItem(Store store) {
         List<Item> items = itemRepository.findAll(); // 商品を全件取得
         List<InventoryWithItemDTO> result = new ArrayList<>();
 
         for (Item item : items) {
-            Optional<Inventory> invOpt = inventoryRepository.findByItem(item); // Store指定も可
+            Optional<Inventory> invOpt = inventoryRepository.findByItemAndStore(item, store); // Storeを指定
             Inventory inventory = invOpt.orElse(null);
             result.add(new InventoryWithItemDTO(inventory, item));
         }
@@ -83,8 +83,9 @@ public class InventoryService {
         return result;
     }
 
-    public long countUnderstockedItems() {
-        return getAllInventoryWithItem().stream()
+
+    public long countUnderstockedItemsBystore(Store store) {
+        return getAllInventoryWithItemByStore(store).stream()
             .filter(dto -> dto.getInventory() != null &&
                            dto.getInventory().getQuantity() < dto.getItem().getStockStd())
             .count();

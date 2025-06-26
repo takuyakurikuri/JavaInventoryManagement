@@ -34,7 +34,7 @@ public class Welcomecontroller {
         if(userDetails != null) {
             User user = userRepository.findByEmail(userDetails.getUsername()).get();
             model.addAttribute("user", user);
-            model.addAttribute("understockCount", inventoryService.countUnderstockedItems());
+            model.addAttribute("understockCount", inventoryService.countUnderstockedItemsBystore(user.getStore()));
 
             Long storeId = userDetails.getUser().getStore().getId();
             Map<String, Object> result = transactionService.getUnconfirmedExpirationsAndCount(storeId);

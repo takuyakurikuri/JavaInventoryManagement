@@ -8,14 +8,14 @@ import lombok.Data;
 @Data
 public class ExpirationCheckDto {
     private Long transactionId;
-    private Long janCode;
+    private String janCode;
     private String itemName;
     private String categoryName;
     private String storeName;
     private LocalDate expirationDate;
     private boolean isNearExpiration;
 
-    public ExpirationCheckDto(Long transactionId, Long janCode, String itemName, String categoryName, String storeName, LocalDate expirationDate) {
+    public ExpirationCheckDto(Long transactionId, String janCode, String itemName, String categoryName, String storeName, LocalDate expirationDate) {
         this.transactionId = transactionId;
         this.janCode = janCode;
         this.itemName = itemName;
